@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -21,6 +23,9 @@ class Post
   private ?string $description = null;
 
   #[ORM\Column(type: Types::DATE_MUTABLE)]
+  #[Context([
+    DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'
+  ])]
   private ?\DateTimeInterface $dateCreated = null;
 
   #[ORM\Column(type: Types::TEXT)]
