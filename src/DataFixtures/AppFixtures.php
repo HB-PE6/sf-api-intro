@@ -4,17 +4,40 @@ namespace App\DataFixtures;
 
 use App\Entity\Country;
 use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
   private const COUNTRIES = ["France", "中國", "Australie", "台灣"];
 
+  public function __construct(
+    private UserPasswordHasherInterface $hasher
+  ) {
+  }
+
   public function load(ObjectManager $manager): void
   {
     $faker = Factory::create();
+
+    $regularUser = new User();
+    $regularUser
+      ->setEmail('bobby@bob.com')
+      ->setPassword($this->hasher->hashPassword($regularUser, "test1234"));
+
+    $manager->persist($regularUser);
+
+    $adminUser = new User();
+    $adminUser
+      ->setEmail('admin@bob.com')
+      ->setPassword($this->hasher->hashPassword($adminUser, "admin1234"))
+      ->setRoles(['ROLE_ADMIN']);
+
+    $manager->persist($adminUser);
+
     $countries = [];
 
     foreach (self::COUNTRIES as $countryName) {
