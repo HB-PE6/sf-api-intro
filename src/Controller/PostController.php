@@ -38,7 +38,7 @@ class PostController extends AbstractController
     ], Response::HTTP_CREATED);
   }
 
-  #[Route('/{id}', name: 'api_posts_item')]
+  #[Route('/{id}', name: 'api_posts_item', methods: ['GET'])]
   public function item(PostRepository $postRepository, int $id): JsonResponse
   {
     $post = $postRepository->find($id);
