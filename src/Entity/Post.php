@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
   operations: [
-    new PostOperation(),
+    new PostOperation(security: "is_granted('ROLE_ADMIN')"),
     new GetCollection(normalizationContext: [
       'groups' => ['post:read:collection']
     ]),
